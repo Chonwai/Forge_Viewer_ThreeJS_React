@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import Viewer from './components/viewer';
+import Panel from './components/panel';
+import React, { useEffect } from 'react';
+import AuthAPI from './apis/auth';
 
 function App() {
+    const [currentUrn, setCurrentUrn] = React.useState(process.env.REACT_APP_URN);
+    useEffect(() => {
+        // Update the document title using the browser API
+        console.log('Create the App!');
+        AuthAPI.getAccessToken();
+    });
     return (
         <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+            <div className="flex flex-row justify-center items-start p-2">
+                <div className="panel p-2 w-1/4">
+                    <p className="break-words">Current URN: {currentUrn}</p>
+                    <Panel setCurrentUrn={setCurrentUrn} />
+                </div>
+                <div className="p-2 w-3/4 h-90vh">
+                    <Viewer currentUrn={currentUrn} />
+                </div>
+            </div>
         </div>
     );
 }
