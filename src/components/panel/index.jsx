@@ -1,133 +1,105 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import './index.css';
-import { Button, TextField } from '@material-ui/core';
-import PublishIcon from '@material-ui/icons/Publish';
-import AuthAPI from '../../apis/auth';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Typography } from '@material-ui/core';
+import Slider from '@material-ui/core/Slider';
 
-const useStyles = makeStyles(theme => ({
-    mgBorder: {
-        margin: theme.spacing(2),
+const PrettoSlider = withStyles({
+    root: {
+        color: '#52af77',
+        height: 8,
     },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
+    thumb: {
+        height: 24,
+        width: 24,
+        backgroundColor: '#fff',
+        border: '2px solid currentColor',
+        marginTop: -8,
+        marginLeft: -12,
+        '&:focus, &:hover, &$active': {
+            boxShadow: 'inherit',
+        },
     },
-}));
+    active: {},
+    valueLabel: {
+        left: 'calc(-50% + 4px)',
+    },
+    track: {
+        height: 8,
+        borderRadius: 4,
+    },
+    rail: {
+        height: 8,
+        borderRadius: 4,
+    },
+})(Slider);
 
-function Panel({ setCurrentUrn }) {
-    const [open, setOpen] = React.useState(false);
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-    const [length, setLength] = useState(0);
-    const [thickness, setThickness] = useState(0);
-    const classes = useStyles();
-    const updateModel = async () => {
-        // let body = {
-        //     width: width,
-        //     height: height,
-        //     length: length,
-        //     thickness: thickness,
-        // };
-        auth();
-        handleToggle();
-        // let urn = await ModelService.editModel(body);
-        // setCurrentUrn(urn);
-        console.log('Update!');
-        handleClose();
+function Panel({ setSize }) {
+    const [width, setWidth] = useState(1);
+    const [height, setHeight] = useState(1);
+    const [deep, setDeep] = useState(1);
+    const updateModel = () => {
+        setSize(width, height, deep);
     };
-    const auth = () => {
-        AuthAPI.getAccessToken();
+    const handleWidthChange = (event, newValue) => {
+        setWidth(newValue);
+        updateModel();
     };
-    const handleWidthChange = e => {
-        setWidth(e.target.value);
+    const handleHeightChange = (event, newValue) => {
+        setHeight(newValue);
+        updateModel();
     };
-    const handleHeightChange = e => {
-        setHeight(e.target.value);
-    };
-    const handleLengthChange = e => {
-        setLength(e.target.value);
-    };
-    const handleThicknessChange = e => {
-        setThickness(e.target.value);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleToggle = () => {
-        setOpen(!open);
+    const handleDeepChange = (event, newValue) => {
+        setDeep(newValue);
+        updateModel();
     };
     return (
         <div className="panel-component w-full h-full flex flex-col">
-            <TextField
-                className={classes.mgBorder}
-                id="outlined-number"
-                label="Width"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                value={width}
-                onChange={handleWidthChange}
-            />
-            <TextField
-                className={classes.mgBorder}
-                id="outlined-number"
-                label="Height"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                value={height}
-                onChange={handleHeightChange}
-            />
-            <TextField
-                className={classes.mgBorder}
-                id="outlined-number"
-                label="Length"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                value={length}
-                onChange={handleLengthChange}
-            />
-            <TextField
-                className={classes.mgBorder}
-                id="outlined-number"
-                label="Thickness"
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                value={thickness}
-                onChange={handleThicknessChange}
-            />
-            <Button
-                className={classes.mgBorder}
-                variant="contained"
-                color="primary"
-                endIcon={<PublishIcon />}
-                onClick={updateModel}
-            >
-                Send
-            </Button>
-            <Backdrop className={classes.backdrop} open={open} onClick={handleClose}>
-                <div className="w-screen flex flex-col justify-center items-center">
-                    <CircularProgress />
-                    <p>Updating...</p>
-                </div>
-            </Backdrop>
+            <div className="p-4">
+                <Typography className="text-left" gutterBottom>
+                    Width
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    aria-label="pretto slider"
+                    min={0.5}
+                    max={2}
+                    step={0.05}
+                    defaultValue={1}
+                    value={width}
+                    onChange={handleWidthChange}
+                />
+            </div>
+            <div className="p-4">
+                <Typography className="text-left" gutterBottom>
+                    Height
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    aria-label="pretto slider"
+                    min={0.5}
+                    max={2}
+                    step={0.05}
+                    defaultValue={1}
+                    value={height}
+                    onChange={handleHeightChange}
+                />
+            </div>
+            <div className="p-4">
+                <Typography className="text-left" gutterBottom>
+                    Deep
+                </Typography>
+                <PrettoSlider
+                    valueLabelDisplay="auto"
+                    aria-label="pretto slider"
+                    min={0.5}
+                    max={2}
+                    step={0.05}
+                    defaultValue={1}
+                    value={deep}
+                    onChange={handleDeepChange}
+                />
+            </div>
         </div>
     );
 }

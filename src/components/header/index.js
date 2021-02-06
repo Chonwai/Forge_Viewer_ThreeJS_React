@@ -29,7 +29,7 @@ function Header() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        Forge Inventor Demo
+                        Forge Viewer + Three.js Demo
                     </Typography>
                     <Button color="inherit" endIcon={<LockOpenIcon />} onClick={auth}>
                         Auth

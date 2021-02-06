@@ -2,14 +2,23 @@ import React, { useEffect, useState } from 'react';
 import './index.css';
 import ForgeViewer from 'react-forge-viewer';
 import LocalStroage from '../../utils/localstorage';
-import { Button } from '@material-ui/core';
-import PublishIcon from '@material-ui/icons/Publish';
 import * as THREE from 'three';
 
-function Viewer({ currentUrn }) {
+function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
     const [view, setView] = useState(null);
     const [model, setModel] = useState(null);
     const [viewer, setViewer] = useState(null);
+    useEffect(() => {
+        if (model != null) {
+            const modelData = model.getData();
+            modelData.instanceTree.enumNodeFragments(3, fragId => {
+                const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+                fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+                fragProxy.updateAnimTransform();
+            });
+            viewer.impl.invalidate(true);
+        }
+    }, [currentWidth, currentHeight, currentDeep]);
     const getForgeToken = () => {
         return {
             access_token: LocalStroage.get('access_token'),
@@ -17,30 +26,6 @@ function Viewer({ currentUrn }) {
             expires_in: 3599,
         };
     };
-    // useEffect(() => {
-    //     // Update the document title using the browser API
-    //     if (view != null) {
-    //         console.log("Window Viewing:");
-    //         console.log(view);
-    //         const ViewerExtension = require('../../utils/viewer-extension');
-    //         window.Autodesk.Viewing.theExtensionManager.registerExtension('ViewerExtension', ViewerExtension);
-    //     }
-    //   }, [view]);
-    // useEffect(() => {
-    //     // Update the document title using the browser API
-    //     console.log(model);
-    //     if (model != null) {
-    //         const modelData = model.getData();
-    //         console.log("Model Data:")
-    //         console.log(view);
-    //         modelData.instanceTree.enumNodeFragments(1, fragId => {
-    //             console.log(fragId);
-    //             const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-    //             fragProxy.scale = new THREE.Vector3(2,2,2);
-    //             fragProxy.updateAnimTransform()
-    //         });
-    //     }
-    // }, [model]);
     const handleTokenRequested = onAccessToken => {
         if (onAccessToken) {
             let token = getForgeToken();
@@ -60,27 +45,19 @@ function Viewer({ currentUrn }) {
         setViewer(viewer);
         setModel(model);
     };
-    const updateModel = () => {
-        console.log(viewer);
-        console.log(model);
-        const modelData = model.getData();
-        modelData.instanceTree.enumNodeFragments(3, fragId => {
-            console.log(fragId);
-            const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-            fragProxy.scale = new THREE.Vector3(1, 1, 1);
-            fragProxy.updateAnimTransform();
-        });
-    };
+    // const updateModel = () => {
+    //     console.log(viewer);
+    //     console.log(model);
+    //     const modelData = model.getData();
+    //     modelData.instanceTree.enumNodeFragments(3, fragId => {
+    //         const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+    //         fragProxy.scale = new THREE.Vector3(2, 2, 1);
+    //         fragProxy.updateAnimTransform();
+    //     });
+    //     viewer.impl.invalidate(true);
+    // };
     return (
         <div className="w-full h-full">
-            <Button
-                variant="contained"
-                color="primary"
-                endIcon={<PublishIcon />}
-                onClick={updateModel}
-            >
-                Send
-            </Button>
             <div className="w-full h-full relative">
                 <ForgeViewer
                     version="7.0"
