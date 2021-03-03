@@ -13,8 +13,13 @@ class ViewerExtension extends window.Autodesk.Viewing.Extension {
         console.log('TemplateExtension is now unloaded!');
         return true;
     }
+
+    static register() {
+        window.Autodesk.Viewing.theExtensionManager.registerExtension(
+            'ViewerExtension',
+            ViewerExtension
+        );
+    }
 }
 
-window.Autodesk.Viewing.theExtensionManager.registerExtension('ViewerExtension', ViewerExtension);
-
-// export default ViewerExtension;
+export default ViewerExtension;

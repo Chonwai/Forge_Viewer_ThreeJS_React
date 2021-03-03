@@ -30,13 +30,13 @@ function App() {
                         <b>Current Size:</b>
                     </p>
                     <p className="text-left">
-                        <b>Width:</b> {36 * currentWidth} inch
+                        <b>Width:</b> {800 * currentWidth} mm
                     </p>
                     <p className="text-left">
-                        <b>Height:</b> {24 * currentHeight} inch
+                        <b>Height:</b> {2100 * currentHeight} mm
                     </p>
                     <p className="text-left">
-                        <b>Deep:</b> {16 * currentDeep} inch
+                        <b>Deep:</b> {584 * currentDeep} mm
                     </p>
                     <Panel setSize={updateSize} />
                 </div>

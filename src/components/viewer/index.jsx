@@ -11,12 +11,35 @@ function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
     useEffect(() => {
         if (model != null) {
             const modelData = model.getData();
-            modelData.instanceTree.enumNodeFragments(3, fragId => {
-                const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-                fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
-                fragProxy.updateAnimTransform();
-            });
+            modelData.instanceTree.enumNodeFragments(
+                2,
+                fragId => {
+                    let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+                    fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+                    fragProxy.updateAnimTransform();
+                },
+                false
+            );
+            modelData.instanceTree.enumNodeFragments(
+                3,
+                fragId => {
+                    let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+                    fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+                    fragProxy.updateAnimTransform();
+                },
+                false
+            );
+            modelData.instanceTree.enumNodeFragments(
+                4,
+                fragId => {
+                    let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+                    fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+                    fragProxy.updateAnimTransform();
+                },
+                false
+            );
             viewer.impl.invalidate(true);
+            viewer.impl.sceneUpdated(true);
         }
     }, [currentWidth, currentHeight, currentDeep]);
     const getForgeToken = () => {
@@ -37,14 +60,31 @@ function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
             console.error('Document contains no viewables.');
         } else {
             //Select the first viewable in the list to use in our viewer component
+            console.log('Loaded Document:', viewables);
             setView(viewables[0]);
         }
     };
-    const handleModelLoaded = (viewer, model) => {
+    const handleModelLoaded = async (viewer, model) => {
         console.log('Loaded model:', model);
         setViewer(viewer);
         setModel(model);
     };
+    // const addModel = () => {
+    //     let color = 0xfff000;
+    //     let geometry = new THREE.BoxGeometry(100, 200, 300);
+    //     const material = new THREE.MeshPhongMaterial({
+    //         specular: new THREE.Color(color),
+    //         side: THREE.DoubleSide,
+    //         color,
+    //         transparent: true,
+    //         opacity: 0.5,
+    //     });
+    //     let someMesh = new THREE.Mesh(geometry, material);
+    //     someMesh.position.set(1, 2, 3);
+    //     const materials = viewer.impl.getMaterials();
+    //     materials.addMaterial(color.toString(16), material, true);
+    //     viewer.impl.scene.add(someMesh);
+    // };
     // const updateModel = () => {
     //     console.log(viewer);
     //     console.log(model);
