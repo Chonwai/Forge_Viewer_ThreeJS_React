@@ -69,22 +69,6 @@ function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
         setViewer(viewer);
         setModel(model);
     };
-    // const addModel = () => {
-    //     let color = 0xfff000;
-    //     let geometry = new THREE.BoxGeometry(100, 200, 300);
-    //     const material = new THREE.MeshPhongMaterial({
-    //         specular: new THREE.Color(color),
-    //         side: THREE.DoubleSide,
-    //         color,
-    //         transparent: true,
-    //         opacity: 0.5,
-    //     });
-    //     let someMesh = new THREE.Mesh(geometry, material);
-    //     someMesh.position.set(1, 2, 3);
-    //     const materials = viewer.impl.getMaterials();
-    //     materials.addMaterial(color.toString(16), material, true);
-    //     viewer.impl.scene.add(someMesh);
-    // };
     // const updateModel = () => {
     //     console.log(viewer);
     //     console.log(model);
