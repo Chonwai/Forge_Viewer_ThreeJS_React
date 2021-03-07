@@ -10,34 +10,41 @@ function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
     const [viewer, setViewer] = useState(null);
     useEffect(() => {
         if (model != null) {
+            const { extension } = require('../../utils/my-awesome-extension');
+            window.Autodesk.Viewing.theExtensionManager.registerExtension(
+                'MyAwesomeExtension',
+                extension
+            );
             const modelData = model.getData();
             modelData.instanceTree.enumNodeFragments(
-                2,
+                3120,
                 fragId => {
                     let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+                    console.log(fragProxy);
                     fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+                    console.log(fragProxy.scale.length());
                     fragProxy.updateAnimTransform();
                 },
                 false
             );
-            modelData.instanceTree.enumNodeFragments(
-                3,
-                fragId => {
-                    let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-                    fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
-                    fragProxy.updateAnimTransform();
-                },
-                false
-            );
-            modelData.instanceTree.enumNodeFragments(
-                4,
-                fragId => {
-                    let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-                    fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
-                    fragProxy.updateAnimTransform();
-                },
-                false
-            );
+            // modelData.instanceTree.enumNodeFragments(
+            //     3,
+            //     fragId => {
+            //         let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+            //         fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+            //         fragProxy.updateAnimTransform();
+            //     },
+            //     false
+            // );
+            // modelData.instanceTree.enumNodeFragments(
+            //     4,
+            //     fragId => {
+            //         let fragProxy = viewer.impl.getFragmentProxy(model, fragId);
+            //         fragProxy.scale = new THREE.Vector3(currentWidth, currentHeight, currentDeep);
+            //         fragProxy.updateAnimTransform();
+            //     },
+            //     false
+            // );
             viewer.impl.invalidate(true);
             viewer.impl.sceneUpdated(true);
         }
@@ -69,17 +76,16 @@ function Viewer({ currentUrn, currentWidth, currentHeight, currentDeep }) {
         setViewer(viewer);
         setModel(model);
     };
-    // const updateModel = () => {
-    //     console.log(viewer);
-    //     console.log(model);
-    //     const modelData = model.getData();
-    //     modelData.instanceTree.enumNodeFragments(3, fragId => {
-    //         const fragProxy = viewer.impl.getFragmentProxy(model, fragId);
-    //         fragProxy.scale = new THREE.Vector3(2, 2, 1);
-    //         fragProxy.updateAnimTransform();
-    //     });
-    //     viewer.impl.invalidate(true);
-    // };
+    const addGeometry = () => {
+        var geom = new THREE.SphereGeometry(10, 8, 8);
+        var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        var sphereMesh = new THREE.Mesh(geom, material);
+        sphereMesh.position.set(1, 2, 3);
+        if (!viewer.overlays.hasScene('custom-scene')) {
+            viewer.overlays.addScene('custom-scene');
+        }
+        viewer.overlays.addMesh(sphereMesh, 'custom-scene');
+    };
     return (
         <div className="w-full h-full">
             <div className="w-full h-full relative">
