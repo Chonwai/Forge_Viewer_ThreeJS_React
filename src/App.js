@@ -1,5 +1,6 @@
 import './App.css';
 import Viewer from './components/viewer';
+import NewViewer from './components/viewer/index_new';
 import Panel from './components/panel';
 import React, { useEffect } from 'react';
 import AuthAPI from './apis/auth';
@@ -41,12 +42,13 @@ function App() {
                     <Panel setSize={updateSize} />
                 </div>
                 <div className="p-2 w-3/4 h-90vh">
-                    <Viewer
+                    {/* <Viewer
                         currentUrn={currentUrn}
                         currentWidth={currentWidth}
                         currentHeight={currentHeight}
                         currentDeep={currentDeep}
-                    />
+                    /> */}
+                    <NewViewer currentUrn={currentUrn} />
                 </div>
             </div>
         </div>
